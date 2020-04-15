@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<h1>
+     <section class="section">
+        <div class="container">
+            <div class="columns">
+                <div class="column is-offset-4 is-4">
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="field has-addons">
+                            <div class="control is-expanded">
+                                {{ form.name }}
+                            </div>
+                            <div class="control">
+                                <button type="submit" class="button is-info">
+                                    Add City
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+</h1>
+<h1>
+{{current.city}}
+{{current.description}}
+{{current.temp}}
+{{current.name}}
+{{current.temp_max}}
+</h1>
+{% for x in  weather_data %}
+<h2>
+
+
+    {{x.data}}
+    {{x.pressure}}
+
+
+
+
+</h2>
+{% endfor %}
+
+</body>
+</html>
