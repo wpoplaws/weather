@@ -37,7 +37,7 @@ def forecast(request):
     }
 
     url = 'http://api.openweathermap.org/data/2.5/forecast?q={}&units=metric&appid=3e8c61a2a241410b6fa72b0186291c90&lang=pl'
-    city = 'Stalowa Wola'
+    city = 'Lublin'
 
     r = requests.get(url.format(city)).json()
     a = 0
