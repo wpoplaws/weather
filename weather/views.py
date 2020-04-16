@@ -1,26 +1,34 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 import requests
 
 from weather.forms import CityForm
+from weather.models import City
+
+
+def main(request):
+    form = CityForm(request.POST or None, request.FILES or None)
+
+    if form.is_valid():
+        form.save()
+        return redirect('forecast')
+
+    return render(request, 'weather/main.html', {"form": form})
 
 
 def forecast(request):
+    city_count = City.objects.count()
+    if city_count == 0:
+        return redirect('main')
 
+    else:
+        cityy = City.objects.latest('name')
+        city = str(cityy).title()
+        url_c = 'http://api.openweathermap.org/data/2.5/weather?q={}&units=metric&appid=3e8c61a2a241410b6fa72b0186291c90&lang=pl'
 
-
-    url_c = 'http://api.openweathermap.org/data/2.5/weather?q={}&units=metric&appid=3e8c61a2a241410b6fa72b0186291c90&lang=pl'
-    city_c = 'Stalowa Wola'
-
-    if request.method == 'POST':
-        form = CityForm(request.POST)
-        form.save()
-
-    form = CityForm()
-
-    c = requests.get(url_c.format(city_c)).json()
-
-    current = {
-        'city': city_c,
+        c = requests.get(url_c.format(city)).json()
+    try:
+        current = {
+        'city': city,
         'lon': c['coord']['lon'],
         'lat': c['coord']['lat'],
         'description': c['weather'][0]['description'],
@@ -35,9 +43,10 @@ def forecast(request):
         'name': c['name'],
 
     }
+    except KeyError:
+        return redirect('no_data')
 
     url = 'http://api.openweathermap.org/data/2.5/forecast?q={}&units=metric&appid=3e8c61a2a241410b6fa72b0186291c90&lang=pl'
-    city = 'Lublin'
 
     r = requests.get(url.format(city)).json()
     a = 0
@@ -59,9 +68,12 @@ def forecast(request):
         print(a)
         weather_data.append(weather_forecast)
 
-    context = {'current': current, 'weather_data': weather_data, 'form' : form}
-
-    return render(request, 'weather/main.html', context)
 
 
+    context = {'current': current, 'weather_data': weather_data, 'city': city}
+    City.objects.all().delete()
+    return render(request, 'weather/forecast.html', context)
 
+
+def no_data(request):
+    return render(request, 'weather/no_data.html', )

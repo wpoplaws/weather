@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+<h1>
+{{current.city}}
+{{current.description}}
+{{current.temp}}
+{{current.name}}
+{{current.temp_max}}
+</h1>
+{% for x in  weather_data %}
+<h2>
+
+
+    {{x.data}}
+    {{x.pressure}}
+
+
+
+
+</h2>
+{% endfor %}
+</html>
