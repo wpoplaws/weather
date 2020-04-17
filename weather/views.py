@@ -21,7 +21,7 @@ def forecast(request):
         return redirect('main')
 
     else:
-        cityy = City.objects.latest('name')
+        cityy = City.objects.last()
         city = str(cityy).title()
         url_c = 'http://api.openweathermap.org/data/2.5/weather?q={}&units=metric&appid=3e8c61a2a241410b6fa72b0186291c90&lang=pl'
 
@@ -69,7 +69,10 @@ def forecast(request):
         weather_data.append(weather_forecast)
 
     context = {'current': current, 'weather_data': weather_data, 'city': city}
-    City.objects.all().delete()
+    if city_count > 10:
+        City.objects.filter().first().delete()
+    else:
+        pass
     return render(request, 'weather/forecast.html', context)
 
 
