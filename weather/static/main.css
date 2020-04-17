@@ -16,13 +16,17 @@ body {
   min-height: 100%;
   font-family: "Helvetica Neue", Arial, sans-serif;
   background: #c3d3d2;
+  border-left: 5px double black;
+  border-right: 5px double black;
 }
 .header {
   margin: 0 auto;
-  padding-top: 84px;
-
+  padding-top: 14px;
+  text-align: center;
   width: 100%;
   background: #075890;
+  border-top: 5px double black;
+  border-bottom: 5px double black;
 }
 
 .demo {
@@ -30,8 +34,9 @@ body {
   padding-top: 64px;
   margin-top: 20px;
 
+
   width: 94%;
-  background: blue;
+
 }
 
 .demo h1 {
@@ -46,7 +51,13 @@ body {
   bottom: 0;
   left: 0;
   padding: 1rem;
-  background-color: #efefef;
+  background-color: #075890;
   text-align: center;
+  border-top: 5px double black;
+  border-bottom: 5px double black;
+}
+
+.test{
+
 }
 

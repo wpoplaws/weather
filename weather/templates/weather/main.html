@@ -12,20 +12,41 @@
 <body>
 <div class="header">
 
+    <h3>
+
+        <figure class="image is-50x50">
+ <div class="test">
+  {% for x in main_data %}
+
+            <img src="http://openweathermap.org/img/w/{{x.icon}}.png" alt="Image"/>
+
+
+            {{x.city}}
+            {{x.temp}}°C
+
+
+
+
+        {% endfor %}</figure>
+    </h3>
+        </div>
 </div>
 <div class="demo">
     <h1>
+        Check the weather in your city!
+    </h1>
         <form method="post">
             {% csrf_token %}
             {{ form }}
             <input type="submit" value="Submit">
         </form>
-    </h1>
+
 </div>
 
 <div class="footer">
 
-    Footer
+  <div class="footer-copyright text-center py-3">© 2020 Copyright:
+            <a href="https://google.com/"> webpage.com</a>
 
 </div>
 </body>
