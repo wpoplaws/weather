@@ -28,21 +28,21 @@ def forecast(request):
         c = requests.get(url_c.format(city)).json()
     try:
         current = {
-        'city': city,
-        'lon': c['coord']['lon'],
-        'lat': c['coord']['lat'],
-        'description': c['weather'][0]['description'],
-        'icon': c['weather'][0]['icon'],
-        'temp': c['main']['temp'],
-        'feels_like': c['main']['feels_like'],
-        'temp_min': c['main']['temp_min'],
-        'temp_max': c['main']['temp_max'],
-        'pressure': c['main']['pressure'],
-        'humidity': c['main']['humidity'],
-        'wind': c['wind']['speed'],
-        'name': c['name'],
+            'city': city,
+            'lon': c['coord']['lon'],
+            'lat': c['coord']['lat'],
+            'description': c['weather'][0]['description'],
+            'icon': c['weather'][0]['icon'],
+            'temp': c['main']['temp'],
+            'feels_like': c['main']['feels_like'],
+            'temp_min': c['main']['temp_min'],
+            'temp_max': c['main']['temp_max'],
+            'pressure': c['main']['pressure'],
+            'humidity': c['main']['humidity'],
+            'wind': c['wind']['speed'],
+            'name': c['name'],
 
-    }
+        }
     except KeyError:
         return redirect('no_data')
 
@@ -65,10 +65,8 @@ def forecast(request):
 
         }
         a += 1
-        print(a)
+
         weather_data.append(weather_forecast)
-
-
 
     context = {'current': current, 'weather_data': weather_data, 'city': city}
     City.objects.all().delete()
