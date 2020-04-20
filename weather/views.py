@@ -1,3 +1,6 @@
+from datetime import time, datetime
+
+import pytz
 from django.shortcuts import render, redirect
 import requests
 
@@ -14,24 +17,38 @@ def main(request):
     a = 1
 
     url_m = 'http://api.openweathermap.org/data/2.5/weather?q={}&units=metric&appid=3e8c61a2a241410b6fa72b0186291c90'
-
-
+    value = []
     main_data = []
     while a < 7:
         main_city = str(MainCities.objects.get(pk=a))
         m = requests.get(url_m.format(main_city)).json()
+
         main_cities = {
             'city': main_city,
             'icon': m['weather'][0]['icon'],
-            'temp': m['main']['temp'],
+            'country': m['sys']['country'],
+            'temp': round(m['main']['temp'],1),
+            'timezone': m['timezone'],
+            'dt': m['dt'],
+            'utc': m['timezone'] / 3600
+
 
         }
+
         a += 1
-
         main_data.append(main_cities)
-    print(main_data[0]['city'])
+        country_codes = main_data[a - 2]["country"]
+        country_timezones = pytz.country_timezones[country_codes]
+        country_timezone = country_timezones[0]
+        current_time = datetime.now(pytz.timezone(country_timezone))
+        asd = current_time.strftime('%H:%M')
 
-    return render(request, 'weather/main.html', {"form": form,"main_data": main_data,})
+        value.append(asd)
+
+
+
+
+    return render(request, 'weather/main.html', {"form": form, "main_data": main_data, "value" : value })
 
 
 def forecast(request):
@@ -52,7 +69,7 @@ def forecast(request):
             'lat': c['coord']['lat'],
             'description': c['weather'][0]['description'],
             'icon': c['weather'][0]['icon'],
-            'temp': c['main']['temp'],
+            'temp': round(c['main']['temp'],1),
             'feels_like': c['main']['feels_like'],
             'temp_min': c['main']['temp_min'],
             'temp_max': c['main']['temp_max'],
@@ -76,7 +93,7 @@ def forecast(request):
             'data': r['list'][a]['dt_txt'],
             'description': r['list'][a]['weather'][0]['description'],
             'wind': r['list'][a]['wind']['speed'],
-            'temperature': r['list'][a]['main']['temp'],
+            'temperature': round(r['list'][a]['main']['temp'],1),
             'feels_like': r['list'][a]['main']['feels_like'],
             'temp_min': r['list'][a]['main']['temp_min'],
             'pressure': r['list'][a]['main']['pressure'],

@@ -11,43 +11,89 @@
 </head>
 <body>
 <div class="header">
+    <ul>
+        <li>
 
-    <h3>
-
-        <figure class="image is-50x50">
- <div class="test">
-  {% for x in main_data %}
-
-            <img src="http://openweathermap.org/img/w/{{x.icon}}.png" alt="Image"/>
+            {% for x in main_data %}
 
 
-            {{x.city}}
-            {{x.temp}}°C
+            <div class="test">
+                <img src="http://openweathermap.org/img/w/{{x.icon}}.png" alt="Image"/> <br>
+                {{x.city}} <br> <br>
+                {{x.temp}}°C
+                <p class="clock" timezone={{x.utc}}>
 
+                </p>
+            </div>
+            {% endfor %}
 
-
-
-        {% endfor %}</figure>
-    </h3>
-        </div>
+        </li>
+    </ul>
 </div>
+<script>
+function dateToText(date) {
+    var hours = date.getHours()
+    var minutes = date.getMinutes();
+    // var seconds = date.getSeconds();
+    if (minutes < 10) minutes = '0'+minutes;
+    //if  seconds < 10) seconds = '0'+seconds;
+    if (hours < 10) hours = '0'+hours;
+    return hours + ":" + minutes; // + ":" + seconds;
+}
+function updateClocks() {
+	for (var i = 0; i < window.arrClocks.length; i++) {
+		var clock = window.arrClocks[i];
+		var offset = window.arrOffsets[i];
+		clock.innerHTML = dateToText(new Date(new Date().getTime()+offset));
+	}
+}
+function startClocks() {
+	clockElements = document.getElementsByClassName('clock');
+	window.arrClocks = []
+	window.arrOffsets = [];
+	var j = 0;
+	for(var i = 0; i < clockElements.length; i++) {
+		el = clockElements[i];
+		timezone = parseInt(el.getAttribute('timezone'));
+		if (!isNaN(timezone)) {
+			var tzDifference = timezone * 60 + (new Date()).getTimezoneOffset();
+			var offset = tzDifference * 60 * 1000;
+			window.arrClocks.push(el);
+			window.arrOffsets.push(offset);
+		}
+	}
+	updateClocks();
+	clockID = setInterval(updateClocks, 1000);
+}
+setTimeout(startClocks, 100);
+
+
+
+
+</script>
+
+
 <div class="demo">
-    <h1>
-        Check the weather in your city!
-    </h1>
+    <div class="demos">
+
+        <h1>
+            Check the weather in your city!
+        </h1>
         <form method="post">
             {% csrf_token %}
             {{ form }}
             <input type="submit" value="Submit">
         </form>
+    </div>
+
 
 </div>
 
 <div class="footer">
 
-  <div class="footer-copyright text-center py-3">© 2020 Copyright:
-            <a href="https://google.com/"> webpage.com</a>
+    <div class="footer-copyright text-center py-3">© 2020 Copyright:
+        <a href="https://google.com/"> webpage.com</a>
 
-</div>
+    </div>
 </body>
 </html>
