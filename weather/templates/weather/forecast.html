@@ -1,21 +1,123 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'forecast.css' %}">
     <title>Title</title>
 </head>
 <body>
+<div class="header">
+    <ul>
+        <li>
+
+            {% for x in main_data %}
 
 
-<h1>
-{{current.city}}
-{{current.description}}
-{{current.temp}}
-{{current.name}}
-{{current.temp_max}}
-</h1>
+            <div class="test">
+                <img src="http://openweathermap.org/img/w/{{x.icon}}.png" alt="Image"/> <br>
+                {{x.city}} <br> <br>
+                {{x.temp}}°C <br> <br>
+                <p class="clock" timezone={{x.utc}}>
+
+                </p>
+            </div>
+            {% endfor %}
+
+        </li>
+    </ul>
+</div>
+<script>
+function dateToText(date) {
+    var hours = date.getHours()
+    var minutes = date.getMinutes();
+    // var seconds = date.getSeconds();
+    if (minutes < 10) minutes = '0'+minutes;
+    //if  seconds < 10) seconds = '0'+seconds;
+    if (hours < 10) hours = '0'+hours;
+    return hours + ":" + minutes; // + ":" + seconds;
+}
+function updateClocks() {
+	for (var i = 0; i < window.arrClocks.length; i++) {
+		var clock = window.arrClocks[i];
+		var offset = window.arrOffsets[i];
+		clock.innerHTML = dateToText(new Date(new Date().getTime()+offset));
+	}
+}
+function startClocks() {
+	clockElements = document.getElementsByClassName('clock');
+	window.arrClocks = []
+	window.arrOffsets = [];
+	var j = 0;
+	for(var i = 0; i < clockElements.length; i++) {
+		el = clockElements[i];
+		timezone = parseInt(el.getAttribute('timezone'));
+		if (!isNaN(timezone)) {
+			var tzDifference = timezone * 60 + (new Date()).getTimezoneOffset();
+			var offset = tzDifference * 60 * 1000;
+			window.arrClocks.push(el);
+			window.arrOffsets.push(offset);
+		}
+	}
+	updateClocks();
+	clockID = setInterval(updateClocks, 1000);
+}
+setTimeout(startClocks, 100);
+
+
+
+
+
+
+
+
+</script>
+
+
+<div class="demo">
+    <div class="demos">
+        <h1>
+            Check the weather in your city!
+        </h1>
+        <form method="post">
+            {% csrf_token %}
+            {{ form }}
+            <input type="submit" value="Check!">
+        </form>
+    </div>
+
+    <div class="curr">
+        <h1>Current weather</h1>
+        <h2>
+            <img src="http://openweathermap.org/img/w/{{current.icon}}.png" alt="Image"/>
+            {{current.city}} /
+            {{current.date}} /
+            <p class="clock" timezone={{current.utc}}></p> /
+        </h2>
+        <div class="details">
+            <div class="left"  style="width: 50%; float:left">
+                <h4>
+                    Temperature: {{current.temp}}°C<br>
+                    Perceived temperature: {{current.feels_like}}°C<br>
+                    Pressure: {{current.pressure}} hPa<br>
+
+                </h4>
+            </div>
+            <div class="right" style="width: 50%; float:right">
+                <h4>
+                    Air humidity: {{current.humidity}} %<br>
+                    Wind: {{current.wind}} m/s <br>
+                    Wind direction: {{current.dir}} <br>
+                </h4>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--<div class="forecast">
 {% for x in  weather_data %}
-<h2>
+<h5>
 
 
     {{x.data}}
@@ -25,7 +127,16 @@
 
 
 
-</h2>
-{% endfor %}
+</h5>
+{% endfor %}-->
+
+<div class="footer">
+
+    <div class="footer-copyright text-center py-3">© 2020 Copyright:
+        <a href="https://google.com/"> webpage.com</a>
+
+    </div>
+
+
 </body>
 </html>

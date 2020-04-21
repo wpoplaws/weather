@@ -27,11 +27,10 @@ def main(request):
             'city': main_city,
             'icon': m['weather'][0]['icon'],
             'country': m['sys']['country'],
-            'temp': round(m['main']['temp'],1),
+            'temp': round(m['main']['temp'], 1),
             'timezone': m['timezone'],
             'dt': m['dt'],
             'utc': m['timezone'] / 3600
-
 
         }
 
@@ -45,13 +44,45 @@ def main(request):
 
         value.append(asd)
 
-
-
-
-    return render(request, 'weather/main.html', {"form": form, "main_data": main_data, "value" : value })
+    return render(request, 'weather/main.html', {"form": form, "main_data": main_data, "value": value})
 
 
 def forecast(request):
+    form = CityForm(request.POST or None, request.FILES or None)
+
+    if form.is_valid():
+        form.save()
+        return redirect('forecast')
+    a = 1
+
+    url_m = 'http://api.openweathermap.org/data/2.5/weather?q={}&units=metric&appid=3e8c61a2a241410b6fa72b0186291c90'
+    value = []
+    main_data = []
+    while a < 7:
+        main_city = str(MainCities.objects.get(pk=a))
+        m = requests.get(url_m.format(main_city)).json()
+
+        main_cities = {
+            'city': main_city,
+            'icon': m['weather'][0]['icon'],
+            'country': m['sys']['country'],
+            'temp': round(m['main']['temp'], 1),
+            'timezone': m['timezone'],
+            'dt': m['dt'],
+            'utc': m['timezone'] / 3600
+
+        }
+
+        a += 1
+        main_data.append(main_cities)
+        country_codes = main_data[a - 2]["country"]
+        country_timezones = pytz.country_timezones[country_codes]
+        country_timezone = country_timezones[0]
+        current_time = datetime.now(pytz.timezone(country_timezone))
+        asd = current_time.strftime('%H:%M')
+
+        value.append(asd)
+
     city_count = City.objects.count()
     if city_count == 0:
         return redirect('main')
@@ -69,16 +100,50 @@ def forecast(request):
             'lat': c['coord']['lat'],
             'description': c['weather'][0]['description'],
             'icon': c['weather'][0]['icon'],
-            'temp': round(c['main']['temp'],1),
-            'feels_like': c['main']['feels_like'],
+            'temp': round(c['main']['temp'], 1),
+            'feels_like': round(c['main']['feels_like'], 1),
             'temp_min': c['main']['temp_min'],
             'temp_max': c['main']['temp_max'],
             'pressure': c['main']['pressure'],
             'humidity': c['main']['humidity'],
             'wind': c['wind']['speed'],
+            'deg': c['wind']['deg'],
             'name': c['name'],
+            'timezone': c['timezone'],
+            'utc': c['timezone'] / 3600,
+            'dt': c['dt'],
 
         }
+
+        gr = current['dt']
+        readable = datetime.fromtimestamp(gr).isoformat()
+        date = readable[0:10]
+        dateb = {
+            'date': date
+
+        }
+        current.update(dateb)
+
+        wind_deg = current['deg']
+
+        dirs = ['North', 'North-northeast', 'Northeast', 'East-northeast', 'East', 'East-southeast', 'Southeast',
+                'South-southeast', 'South', 'South-southwest', 'Southwest', 'West-southwest', 'West', 'West-northwest',
+                'Northwest', 'North-northwest']
+        ix = round(wind_deg / (360. / len(dirs)))
+        ixx = dirs[ix % len(dirs)]
+
+        dir_dic = {
+            'dir': ixx
+        }
+        current.update(dir_dic)
+
+
+
+
+
+
+
+
     except KeyError:
         return redirect('no_data')
 
@@ -93,7 +158,7 @@ def forecast(request):
             'data': r['list'][a]['dt_txt'],
             'description': r['list'][a]['weather'][0]['description'],
             'wind': r['list'][a]['wind']['speed'],
-            'temperature': round(r['list'][a]['main']['temp'],1),
+            'temperature': round(r['list'][a]['main']['temp'], 1),
             'feels_like': r['list'][a]['main']['feels_like'],
             'temp_min': r['list'][a]['main']['temp_min'],
             'pressure': r['list'][a]['main']['pressure'],
@@ -104,7 +169,8 @@ def forecast(request):
 
         weather_data.append(weather_forecast)
 
-    context = {'current': current, 'weather_data': weather_data, 'city': city}
+    context = {'current': current, 'weather_data': weather_data, 'city': city, "form": form, "main_data": main_data,
+               "value": value}
     if city_count > 10:
         City.objects.filter().first().delete()
     else:
