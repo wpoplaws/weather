@@ -71,6 +71,8 @@ setTimeout(startClocks, 100);
 
 
 
+
+
 </script>
 
 
@@ -85,50 +87,157 @@ setTimeout(startClocks, 100);
             <input type="submit" value="Check!">
         </form>
     </div>
-
-    <div class="curr">
-        <h1>Current weather</h1>
-        <h2>
-            <img src="http://openweathermap.org/img/w/{{current.icon}}.png" alt="Image"/>
-            {{current.city}} /
-            {{current.date}} /
-            <p class="clock" timezone={{current.utc}}></p> /
-        </h2>
-        <div class="details">
-            <div class="left"  style="width: 50%; float:left">
-                <h4>
-                    Temperature: {{current.temp}}°C<br>
-                    Perceived temperature: {{current.feels_like}}°C<br>
-                    Pressure: {{current.pressure}} hPa<br>
-
-                </h4>
-            </div>
-            <div class="right" style="width: 50%; float:right">
-                <h4>
-                    Air humidity: {{current.humidity}} %<br>
-                    Wind: {{current.wind}} m/s <br>
-                    Wind direction: {{current.dir}} <br>
-                </h4>
-            </div>
-        </div>
-    </div>
 </div>
 
+<div class="curr">
+    <h1>Current weather</h1>
+    <h2>
+        <img src="http://openweathermap.org/img/w/{{current.icon}}.png" alt="Image"/>
+        {{current.city}} /
+        {{current.date}} /
+        <p class="clock" timezone={{current.utc}}></p>
+    </h2>
+    <div class="details">
+        <div class="left" style="width: 50%; float:left">
+            <h4>
+                Temperature: {{current.temp}}°C<br>
+                Perceived temperature: {{current.feels_like}}°C<br>
+                Pressure: {{current.pressure}} hPa<br>
 
-<!--<div class="forecast">
-{% for x in  weather_data %}
-<h5>
+            </h4>
+        </div>
+        <div class="right" style="width: 50%; float:right">
+            <h4>
+                Air humidity: {{current.humidity}} %<br>
+                Wind: {{current.wind}} m/s <br>
+                Wind direction: {{current.dir}} <br>
+            </h4>
+        </div>
+    </div>
+
+</div>
+
+<div class="forecast">
+    <div class="today">
+    <h1>5 day / 3 hour forecast</h1>
+    <h2> Today</h2>
+        <h3></h3>
+    {% for x in first_day %}
+
+    <h4>
+        <img src="http://openweathermap.org/img/w/{{x.icon}}.png" alt="Image"/>
+
+        {{x.data}}
+
+      Temperature: {{x.temperature}} °C<br>
+      Decription: {{x.description}}
 
 
-    {{x.data}}
-    {{x.pressure}}
-    {{x.temperature}} °C
+    </h4>
+
+    {% endfor %}</div>
+    <div class="tomorrow">
+    <h2> Tommorow</h2>
+        <h3></h3>
+    {% for x in second_day %}
+
+    <h4>
+        <img src="http://openweathermap.org/img/w/{{x.icon}}.png" alt="Image"/>
+
+        {{x.data}} <br>
+
+      Temperature: {{x.temperature}} °C<br>
+      Decription: {{x.description}}
 
 
+    </h4>
+    {% endfor %}
+    </div>
+    <div class="third">
+    {% for x in third_day %}
+       <h2> {{x.day_name}}
+    {% endfor %}</h2>
+        <h3></h3>
+    {% for x in third_day %}
 
 
-</h5>
-{% endfor %}-->
+    <h4>
+        <img src="http://openweathermap.org/img/w/{{x.icon}}.png" alt="Image"/>
+
+        {{x.data}} <br>
+
+      Temperature: {{x.temperature}} °C<br>
+      Decription: {{x.description}}
+
+
+    </h4>
+    {% endfor %}
+    </div>
+    <div class="fourth">
+{% for x in fourth_day %}
+       <h2> {{x.day_name}}</h2>
+    {% endfor %}
+        <h3></h3>
+
+
+    {% for x in fourth_day %}
+
+
+    <h4>
+        <img src="http://openweathermap.org/img/w/{{x.icon}}.png" alt="Image"/>
+
+        {{x.data}} <br>
+
+
+      Temperature: {{x.temperature}} °C<br>
+      Decription: {{x.description}}
+
+
+    </h4>
+    {% endfor %}
+    </div>
+    <div class="fifth">
+{% for x in fifth_day %}
+       <h2> {{x.day_name}}</h2>
+    {% endfor %}
+        <h3></h3>
+
+    {% for x in fifth_day %}
+
+    <h4>
+        <img src="http://openweathermap.org/img/w/{{x.icon}}.png" alt="Image"/>
+
+        {{x.data}} <br>
+
+      Temperature: {{x.temperature}} °C<br>
+      Decription: {{x.description}}
+
+
+    </h4>
+    {% endfor %}
+    </div>
+    <dix class="sixth">
+    {% for x in sixth_day %}
+       <h2> {{x.day_name}}</h2>
+    {% endfor %}
+        <h3></h3>
+
+    {% for x in sixth_day %}
+
+    <h4>
+        <img src="http://openweathermap.org/img/w/{{x.icon}}.png" alt="Image"/>
+
+        {{x.data}} <br>
+
+      Temperature: {{x.temperature}} °C<br>
+      Decription: {{x.description}}
+
+
+    </h4>
+    {% endfor %}
+    </dix>
+        </li>
+    </ul>
 
 <div class="footer">
 
@@ -136,6 +245,8 @@ setTimeout(startClocks, 100);
         <a href="https://google.com/"> webpage.com</a>
 
     </div>
+
+
 
 
 </body>

@@ -1,4 +1,4 @@
-from datetime import time, datetime
+from datetime import time, datetime,timedelta
 
 import pytz
 from django.shortcuts import render, redirect
@@ -151,12 +151,21 @@ def forecast(request):
 
     r = requests.get(url.format(city)).json()
     a = 0
+    list = []
     weather_data = []
+    first_day = []
+    second_day = []
+    third_day = []
+    fourth_day = []
+    fifth_day = []
+    sixth_day = []
     while a < 40:
         weather_forecast = {
             'city': city,
-            'data': r['list'][a]['dt_txt'],
+            'data': r['list'][a]['dt_txt'][5:16],
+            'day': r['list'][a]['dt_txt'][5:10],
             'description': r['list'][a]['weather'][0]['description'],
+            'icon': r['list'][a]['weather'][0]['icon'],
             'wind': r['list'][a]['wind']['speed'],
             'temperature': round(r['list'][a]['main']['temp'], 1),
             'feels_like': r['list'][a]['main']['feels_like'],
@@ -168,9 +177,61 @@ def forecast(request):
         a += 1
 
         weather_data.append(weather_forecast)
+        list.append(weather_forecast['day'])
+
+    first = list.count(list[0])
+    second = list.count(list[first])
+    third = list.count(list[second + first])
+    fourth = list.count(list[third + second + first])
+    fifth = list.count(list[fourth + third + second + first])
+    sixth = list.count(list[fifth + fourth + third + second + first])
+
+
+    first_day.append(weather_data[0:first])
+    second_day.append(weather_data[first:second+first])
+    third_day.append(weather_data[second+first:third+second+first])
+    fourth_day.append(weather_data[third+second+first:fourth+third+second+first])
+    fifth_day.append(weather_data[fourth+third+second+first:fifth+fourth+third+second+first])
+    sixth_day.append(weather_data[fifth+fourth+third+second+first:])
+
+    first_day = first_day[0]
+    second_day = second_day[0]
+    third_day = third_day[0]
+    fourth_day = fourth_day[0]
+    fifth_day = fifth_day[0]
+    sixth_day = sixth_day[0]
+
+    from datetime import date, timedelta
+
+    tomo = date.today() - timedelta(-2)
+    to = tomo.strftime('%A')
+    third_day[0].update({'day_name':to})
+
+    t_days = date.today() - timedelta(-3)
+    td = t_days.strftime('%A')
+    fourth_day[0].update({'day_name':td})
+
+    fr_days = date.today() - timedelta(-4)
+    tfr = fr_days.strftime('%A')
+    fifth_day[0].update({'day_name':tfr})
+
+    s_days = date.today() - timedelta(-5)
+    ts = s_days.strftime('%A')
+    sixth_day[0].update({'day_name': ts})
+
+
+
+
+
 
     context = {'current': current, 'weather_data': weather_data, 'city': city, "form": form, "main_data": main_data,
-               "value": value}
+            "value": value,'first_day' : first_day, 'second_day':second_day,'third_day':third_day,'fourth_day':fourth_day
+              ,'fifth_day':fifth_day,'sixth_day':sixth_day }
+
+
+
+
+
     if city_count > 10:
         City.objects.filter().first().delete()
     else:
