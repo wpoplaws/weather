@@ -1,0 +1,148 @@
+html {
+  height: 100%;
+  box-sizing: border-box;
+  overflow: -moz-scrollbars-vertical;
+  overflow-y: scroll;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+body {
+  position: relative;
+  margin: 0;
+  padding-bottom: 6rem;
+  min-height: 100%;
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  background-image: linear-gradient(to right, #3333ff, #66ffff );
+
+}
+.header {
+  margin: 0 auto;
+  padding: 10px 5px auto 10px;
+  text-align: center;
+  width: 100%;
+  background: #075890;
+  border-top: 5px double black;
+  border-bottom: 5px double black;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130 px, 1fr));
+  justify-content: space-around;
+}
+
+ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: space-around;
+}
+
+ li {
+    display: flex;
+    text-align: center;
+    color: #fff;
+    text-decoration: none;
+    justify-content: space-between;
+}
+
+.demo {
+  margin: 0 auto;
+  padding-top: 46px;
+  margin-top: 20px;
+  width: 100%;
+  position: absolute;
+
+}
+.curr {
+color: black;
+font-size: 26px;
+border-top: 5px double black;
+margin-top:140px;
+padding-left:20px;
+
+}
+
+
+.demo h1 {
+  margin-top: 0;
+}
+
+.footer {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 1rem;
+  background-color: #075890;
+  text-align: center;
+  border-top: 5px double black;
+  border-bottom: 5px double black;
+  color:#fff;
+}
+
+.footer a {
+text-decoration: none;
+color:#000;
+}
+
+.test{
+    display:block;
+    justify-content: space-between;
+    text-align: center;
+    margin:30px;
+    margin-bottom:0px;
+    margin-top:0px;
+    padding-right: 60px;
+    padding-left: 20px;
+}
+
+.demos{
+    margin: 0;
+    position: absolute;
+    top: 80%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%) }
+
+}
+
+.demos{
+    margin: 0;
+    position: absolute;
+    top: 80%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%) }
+
+}
+
+.alert h2 {
+
+}
+
+
+.closebtn {
+  margin-right: 15px;
+  color: black;
+  font-weight: normal;
+  float: right;
+  font-size: 23px;
+  line-height: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+
+.closebtn:hover {
+  font-weight: bold;
+}
+
+
+
+
+
+
