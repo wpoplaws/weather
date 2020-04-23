@@ -1,4 +1,4 @@
-from datetime import time, datetime,timedelta
+from datetime import time, datetime, timedelta
 
 import pytz
 from django.shortcuts import render, redirect
@@ -10,19 +10,16 @@ from weather.models import City, MainCities
 
 def main(request):
     form = CityForm(request.POST or None, request.FILES or None)
-
     if form.is_valid():
         form.save()
         return redirect('forecast')
     a = 1
-
     url_m = 'http://api.openweathermap.org/data/2.5/weather?q={}&units=metric&appid=3e8c61a2a241410b6fa72b0186291c90'
     value = []
     main_data = []
     while a < 7:
         main_city = str(MainCities.objects.get(pk=a))
         m = requests.get(url_m.format(main_city)).json()
-
         main_cities = {
             'city': main_city,
             'icon': m['weather'][0]['icon'],
@@ -41,7 +38,6 @@ def main(request):
         country_timezone = country_timezones[0]
         current_time = datetime.now(pytz.timezone(country_timezone))
         asd = current_time.strftime('%H:%M')
-
         value.append(asd)
 
     return render(request, 'weather/main.html', {"form": form, "main_data": main_data, "value": value})
@@ -49,7 +45,6 @@ def main(request):
 
 def forecast(request):
     form = CityForm(request.POST or None, request.FILES or None)
-
     if form.is_valid():
         form.save()
         return redirect('forecast')
@@ -80,7 +75,6 @@ def forecast(request):
         country_timezone = country_timezones[0]
         current_time = datetime.now(pytz.timezone(country_timezone))
         asd = current_time.strftime('%H:%M')
-
         value.append(asd)
 
     city_count = City.objects.count()
@@ -123,32 +117,20 @@ def forecast(request):
 
         }
         current.update(dateb)
-
         wind_deg = current['deg']
-
         dirs = ['North', 'North-northeast', 'Northeast', 'East-northeast', 'East', 'East-southeast', 'Southeast',
                 'South-southeast', 'South', 'South-southwest', 'Southwest', 'West-southwest', 'West', 'West-northwest',
                 'Northwest', 'North-northwest']
         ix = round(wind_deg / (360. / len(dirs)))
         ixx = dirs[ix % len(dirs)]
-
         dir_dic = {
             'dir': ixx
         }
         current.update(dir_dic)
-
-
-
-
-
-
-
-
     except KeyError:
         return redirect('no_data')
 
     url = 'http://api.openweathermap.org/data/2.5/forecast?q={}&units=metric&appid=3e8c61a2a241410b6fa72b0186291c90'
-
     r = requests.get(url.format(city)).json()
     a = 0
     list = []
@@ -175,7 +157,6 @@ def forecast(request):
 
         }
         a += 1
-
         weather_data.append(weather_forecast)
         list.append(weather_forecast['day'])
 
@@ -186,13 +167,12 @@ def forecast(request):
     fifth = list.count(list[fourth + third + second + first])
     sixth = list.count(list[fifth + fourth + third + second + first])
 
-
     first_day.append(weather_data[0:first])
-    second_day.append(weather_data[first:second+first])
-    third_day.append(weather_data[second+first:third+second+first])
-    fourth_day.append(weather_data[third+second+first:fourth+third+second+first])
-    fifth_day.append(weather_data[fourth+third+second+first:fifth+fourth+third+second+first])
-    sixth_day.append(weather_data[fifth+fourth+third+second+first:])
+    second_day.append(weather_data[first:second + first])
+    third_day.append(weather_data[second + first:third + second + first])
+    fourth_day.append(weather_data[third + second + first:fourth + third + second + first])
+    fifth_day.append(weather_data[fourth + third + second + first:fifth + fourth + third + second + first])
+    sixth_day.append(weather_data[fifth + fourth + third + second + first:])
 
     first_day = first_day[0]
     second_day = second_day[0]
@@ -205,32 +185,24 @@ def forecast(request):
 
     tomo = date.today() - timedelta(-2)
     to = tomo.strftime('%A')
-    third_day[0].update({'day_name':to})
+    third_day[0].update({'day_name': to})
 
     t_days = date.today() - timedelta(-3)
     td = t_days.strftime('%A')
-    fourth_day[0].update({'day_name':td})
+    fourth_day[0].update({'day_name': td})
 
     fr_days = date.today() - timedelta(-4)
     tfr = fr_days.strftime('%A')
-    fifth_day[0].update({'day_name':tfr})
+    fifth_day[0].update({'day_name': tfr})
 
     s_days = date.today() - timedelta(-5)
     ts = s_days.strftime('%A')
     sixth_day[0].update({'day_name': ts})
 
-
-
-
-
-
     context = {'current': current, 'weather_data': weather_data, 'city': city, "form": form, "main_data": main_data,
-            "value": value,'first_day' : first_day, 'second_day':second_day,'third_day':third_day,'fourth_day':fourth_day
-              ,'fifth_day':fifth_day,'sixth_day':sixth_day }
-
-
-
-
+               "value": value, 'first_day': first_day, 'second_day': second_day, 'third_day': third_day,
+               'fourth_day': fourth_day
+        , 'fifth_day': fifth_day, 'sixth_day': sixth_day}
 
     if city_count > 10:
         City.objects.filter().first().delete()
@@ -240,4 +212,35 @@ def forecast(request):
 
 
 def no_data(request):
-    return render(request, 'weather/no_data.html', )
+    form = CityForm(request.POST or None, request.FILES or None)
+    if form.is_valid():
+        form.save()
+        return redirect('forecast')
+    a = 1
+    url_m = 'http://api.openweathermap.org/data/2.5/weather?q={}&units=metric&appid=3e8c61a2a241410b6fa72b0186291c90'
+    value = []
+    main_data = []
+    while a < 7:
+        main_city = str(MainCities.objects.get(pk=a))
+        m = requests.get(url_m.format(main_city)).json()
+        main_cities = {
+            'city': main_city,
+            'icon': m['weather'][0]['icon'],
+            'country': m['sys']['country'],
+            'temp': round(m['main']['temp'], 1),
+            'timezone': m['timezone'],
+            'dt': m['dt'],
+            'utc': m['timezone'] / 3600
+
+        }
+
+        a += 1
+        main_data.append(main_cities)
+        country_codes = main_data[a - 2]["country"]
+        country_timezones = pytz.country_timezones[country_codes]
+        country_timezone = country_timezones[0]
+        current_time = datetime.now(pytz.timezone(country_timezone))
+        asd = current_time.strftime('%H:%M')
+        value.append(asd)
+
+    return render(request, 'weather/no_data.html', {"form": form, "main_data": main_data, "value": value})

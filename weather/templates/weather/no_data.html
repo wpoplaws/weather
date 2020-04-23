@@ -1,10 +1,86 @@
-<!DOCTYPE html>
+{% load static %}
+<!doctype html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="{% static 'main.css' %}">
+    <title>Try again ! </title>
 </head>
+<div class="alert">
+  <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+  <h2>Unfortunately, there is no such city in our database.<br> Try again !</h2>
+</div>
 <body>
-Nie ma takiego miasta
+<div class="header">
+    <ul>
+        <li>
+            {% for x in main_data %}
+            <div class="test">
+                <img src="http://openweathermap.org/img/w/{{x.icon}}.png" alt="Image"/> <br>
+                {{x.city}} <br> <br>
+                {{x.temp}}°C
+                <p class="clock" timezone={{x.utc}}>
+                </p>
+            </div>
+            {% endfor %}
+        </li>
+    </ul>
+</div>
+<script>
+function dateToText(date) {
+    var hours = date.getHours()
+    var minutes = date.getMinutes();
+    // var seconds = date.getSeconds();
+    if (minutes < 10) minutes = '0'+minutes;
+    //if  seconds < 10) seconds = '0'+seconds;
+    if (hours < 10) hours = '0'+hours;
+    return hours + ":" + minutes; // + ":" + seconds;
+}
+function updateClocks() {
+	for (var i = 0; i < window.arrClocks.length; i++) {
+		var clock = window.arrClocks[i];
+		var offset = window.arrOffsets[i];
+		clock.innerHTML = dateToText(new Date(new Date().getTime()+offset));
+	}
+}
+function startClocks() {
+	clockElements = document.getElementsByClassName('clock');
+	window.arrClocks = []
+	window.arrOffsets = [];
+	var j = 0;
+	for(var i = 0; i < clockElements.length; i++) {
+		el = clockElements[i];
+		timezone = parseInt(el.getAttribute('timezone'));
+		if (!isNaN(timezone)) {
+			var tzDifference = timezone * 60 + (new Date()).getTimezoneOffset();
+			var offset = tzDifference * 60 * 1000;
+			window.arrClocks.push(el);
+			window.arrOffsets.push(offset);
+		}
+	}
+	updateClocks();
+	clockID = setInterval(updateClocks, 1000);
+}
+setTimeout(startClocks, 100);
+</script>
+<div class="demo">
+    <div class="demos">
+        <h1>
+            Check the weather in your city!
+        </h1>
+        <form method="post">
+            {% csrf_token %}
+            {{ form }}
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+</div>
+<div class="footer">
+    <div class="footer-copyright text-center py-3">© 2020 Copyright:
+        <a href="https://google.com/"> webpage.com</a>
+    </div>
 </body>
 </html>

@@ -4,26 +4,21 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="{% static 'forecast.css' %}">
-    <title>Title</title>
+    <title>{{current.city}}</title>
 </head>
 <body>
 <div class="header">
     <ul>
         <li>
-
             {% for x in main_data %}
-
-
             <div class="test">
                 <img src="http://openweathermap.org/img/w/{{x.icon}}.png" alt="Image"/> <br>
                 {{x.city}} <br> <br>
                 {{x.temp}}°C <br> <br>
                 <p class="clock" timezone={{x.utc}}>
-
                 </p>
             </div>
             {% endfor %}
-
         </li>
     </ul>
 </div>
@@ -63,19 +58,7 @@ function startClocks() {
 	clockID = setInterval(updateClocks, 1000);
 }
 setTimeout(startClocks, 100);
-
-
-
-
-
-
-
-
-
-
 </script>
-
-
 <div class="demo">
     <div class="demos">
         <h1>
@@ -88,7 +71,6 @@ setTimeout(startClocks, 100);
         </form>
     </div>
 </div>
-
 <div class="curr">
     <h1>Current weather</h1>
     <h2>
@@ -103,7 +85,6 @@ setTimeout(startClocks, 100);
                 Temperature: {{current.temp}}°C<br>
                 Perceived temperature: {{current.feels_like}}°C<br>
                 Pressure: {{current.pressure}} hPa<br>
-
             </h4>
         </div>
         <div class="right" style="width: 50%; float:right">
@@ -114,140 +95,94 @@ setTimeout(startClocks, 100);
             </h4>
         </div>
     </div>
-
 </div>
-
 <div class="forecast">
     <div class="today">
-    <h1>5 day / 3 hour forecast</h1>
-    <h2> Today</h2>
+        <h1>5 day / 3 hour forecast</h1>
+        <h2> Today</h2>
         <h3></h3>
-    {% for x in first_day %}
-
-    <h4>
-        <img src="http://openweathermap.org/img/w/{{x.icon}}.png" alt="Image"/>
-
-        {{x.data}}
-
-      Temperature: {{x.temperature}} °C<br>
-      Decription: {{x.description}}
-
-
-    </h4>
-
-    {% endfor %}</div>
+        {% for x in first_day %}
+        <h4>
+            <img src="http://openweathermap.org/img/w/{{x.icon}}.png" alt="Image"/>
+            {{x.data}}
+            Temperature: {{x.temperature}} °C<br>
+            Decription: {{x.description}}
+        </h4>
+        {% endfor %}
+    </div>
     <div class="tomorrow">
-    <h2> Tommorow</h2>
+        <h2> Tommorow</h2>
         <h3></h3>
-    {% for x in second_day %}
-
-    <h4>
-        <img src="http://openweathermap.org/img/w/{{x.icon}}.png" alt="Image"/>
-
-        {{x.data}} <br>
-
-      Temperature: {{x.temperature}} °C<br>
-      Decription: {{x.description}}
-
-
-    </h4>
-    {% endfor %}
+        {% for x in second_day %}
+        <h4>
+            <img src="http://openweathermap.org/img/w/{{x.icon}}.png" alt="Image"/>
+            {{x.data}} <br>
+            Temperature: {{x.temperature}} °C<br>
+            Decription: {{x.description}}
+        </h4>
+        {% endfor %}
     </div>
     <div class="third">
-    {% for x in third_day %}
-       <h2> {{x.day_name}}
-    {% endfor %}</h2>
+        {% for x in third_day %}
+        <h2> {{x.day_name}}
+            {% endfor %}</h2>
         <h3></h3>
-    {% for x in third_day %}
-
-
-    <h4>
-        <img src="http://openweathermap.org/img/w/{{x.icon}}.png" alt="Image"/>
-
-        {{x.data}} <br>
-
-      Temperature: {{x.temperature}} °C<br>
-      Decription: {{x.description}}
-
-
-    </h4>
-    {% endfor %}
+        {% for x in third_day %}
+        <h4>
+            <img src="http://openweathermap.org/img/w/{{x.icon}}.png" alt="Image"/>
+            {{x.data}} <br>
+            Temperature: {{x.temperature}} °C<br>
+            Decription: {{x.description}}
+        </h4>
+        {% endfor %}
     </div>
     <div class="fourth">
-{% for x in fourth_day %}
-       <h2> {{x.day_name}}</h2>
-    {% endfor %}
+        {% for x in fourth_day %}
+        <h2> {{x.day_name}}</h2>
+        {% endfor %}
         <h3></h3>
-
-
-    {% for x in fourth_day %}
-
-
-    <h4>
-        <img src="http://openweathermap.org/img/w/{{x.icon}}.png" alt="Image"/>
-
-        {{x.data}} <br>
-
-
-      Temperature: {{x.temperature}} °C<br>
-      Decription: {{x.description}}
-
-
-    </h4>
-    {% endfor %}
+        {% for x in fourth_day %}
+        <h4>
+            <img src="http://openweathermap.org/img/w/{{x.icon}}.png" alt="Image"/>
+            {{x.data}} <br>
+            Temperature: {{x.temperature}} °C<br>
+            Decription: {{x.description}}
+        </h4>
+        {% endfor %}
     </div>
     <div class="fifth">
-{% for x in fifth_day %}
-       <h2> {{x.day_name}}</h2>
-    {% endfor %}
+        {% for x in fifth_day %}
+        <h2> {{x.day_name}}</h2>
+        {% endfor %}
         <h3></h3>
-
-    {% for x in fifth_day %}
-
-    <h4>
-        <img src="http://openweathermap.org/img/w/{{x.icon}}.png" alt="Image"/>
-
-        {{x.data}} <br>
-
-      Temperature: {{x.temperature}} °C<br>
-      Decription: {{x.description}}
-
-
-    </h4>
-    {% endfor %}
+        {% for x in fifth_day %}
+        <h4>
+            <img src="http://openweathermap.org/img/w/{{x.icon}}.png" alt="Image"/>
+            {{x.data}} <br>
+            Temperature: {{x.temperature}} °C<br>
+            Decription: {{x.description}}
+        </h4>
+        {% endfor %}
     </div>
     <dix class="sixth">
-    {% for x in sixth_day %}
-       <h2> {{x.day_name}}</h2>
-    {% endfor %}
+        {% for x in sixth_day %}
+        <h2> {{x.day_name}}</h2>
+        {% endfor %}
         <h3></h3>
-
-    {% for x in sixth_day %}
-
-    <h4>
-        <img src="http://openweathermap.org/img/w/{{x.icon}}.png" alt="Image"/>
-
-        {{x.data}} <br>
-
-      Temperature: {{x.temperature}} °C<br>
-      Decription: {{x.description}}
-
-
-    </h4>
-    {% endfor %}
+        {% for x in sixth_day %}
+        <h4>
+            <img src="http://openweathermap.org/img/w/{{x.icon}}.png" alt="Image"/>
+            {{x.data}} <br>
+            Temperature: {{x.temperature}} °C<br>
+            Decription: {{x.description}}
+        </h4>
+        {% endfor %}
     </dix>
-        </li>
+    </li>
     </ul>
-
-<div class="footer">
-
-    <div class="footer-copyright text-center py-3">© 2020 Copyright:
-        <a href="https://google.com/"> webpage.com</a>
-
-    </div>
-
-
-
-
+    <div class="footer">
+        <div class="footer-copyright text-center py-3">© 2020 Copyright:
+            <a href="https://google.com/"> webpage.com</a>
+        </div>
 </body>
 </html>
