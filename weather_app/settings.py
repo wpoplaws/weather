@@ -25,7 +25,7 @@ SECRET_KEY = '=i6o(pplfb!e53gb6=pa)x5)t)6%*i2-za)1%$n@91-n63b598'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['theweatherchecker.herokuapp.com']
 
 
 # Application definition
